@@ -1,18 +1,14 @@
+import AuthLayout from "app/core/layouts/AuthLayout"
+import { BlitzPage, useRouter } from "blitz"
 import React from "react"
-import { useRouter, BlitzPage } from "blitz"
-import Layout from "app/core/layouts/Layout"
-import { SignupForm } from "app/auth/components/SignupForm"
+import SignupWrapper from "../components/SignupWrapper"
 
 const SignupPage: BlitzPage = () => {
-  const router = useRouter()
+    const router = useRouter()
 
-  return (
-    <div>
-      <SignupForm onSuccess={() => router.push("/")} />
-    </div>
-  )
+    return <SignupWrapper onSuccess={() => router.push("/")} />
 }
 
-SignupPage.getLayout = (page) => <Layout title="Sign Up">{page}</Layout>
+SignupPage.getLayout = (page) => <AuthLayout title="Sign Up">{page}</AuthLayout>
 
 export default SignupPage

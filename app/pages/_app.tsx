@@ -11,6 +11,9 @@ import { queryCache } from "react-query"
 import LoginForm from "app/auth/components/LoginForm"
 
 import "app/core/styles/index.css"
+import React from "react"
+import AuthLayout from "app/core/layouts/AuthLayout"
+import LoginWrapper from "app/auth/components/LoginWrapper"
 
 export default function App({ Component, pageProps }: AppProps) {
     const getLayout = Component.getLayout || ((page) => page)
@@ -33,7 +36,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
 function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
     if (error instanceof AuthenticationError) {
-        return <LoginForm onSuccess={resetErrorBoundary} />
+        return (
+            <AuthLayout>
+                <LoginWrapper onSuccess={resetErrorBoundary} />
+            </AuthLayout>
+        )
     } else if (error instanceof AuthorizationError) {
         return (
             <ErrorComponent
