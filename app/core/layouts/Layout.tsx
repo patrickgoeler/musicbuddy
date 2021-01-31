@@ -20,7 +20,7 @@ const Layout = ({ title, children }: LayoutProps) => {
 
                 <main className="flex-1 relative flex flex-col z-0 py-6 px-4 sm:px-6 md:px-8 overflow-y-auto focus:outline-none">
                     {title && (
-                        <div className="max-w-7xl">
+                        <div className="max-w-7xl mb-10">
                             <h1 className="text-2xl font-semibold text-gray-900">{title}</h1>
                         </div>
                     )}

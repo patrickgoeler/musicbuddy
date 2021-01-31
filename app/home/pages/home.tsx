@@ -8,7 +8,7 @@ function Home() {
     const [isPlaying, setIsPlaying] = useState(false)
     const [likes, setLikes] = useState<any[]>([])
     return (
-        <div className="h-full flex flex-col items-center justify-center">
+        <div className="h-full flex flex-col">
             {likes.length > 0 && (
                 <Suspense fallback={<div>Loading matches...</div>}>
                     <MatchList />
@@ -25,11 +25,13 @@ function Home() {
                 </Suspense>
             ) : (
                 <Button
+                    className="mt-4"
                     onClick={() => {
                         // fetch random tracks
                         setLikes([])
                         setIsPlaying(true)
                     }}
+                    fullWidth
                     variant="primary"
                 >
                     Let's Play
