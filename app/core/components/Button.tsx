@@ -9,13 +9,13 @@ const VARIANTS = {
         disabled: "bg-indigo-400",
     },
     default: {
-        base: "border-gray-300",
+        base: "border-gray-300 text-gray-700 focus:outline-none",
         active:
-            "bg-white text-gray-700 hover:text-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+            "bg-white hover:text-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
         disabled: "bg-gray-100",
     },
     danger: {
-        base: "border-transparent text-white",
+        base: "border-transparent text-white focus:outline-none",
         active: "bg-red-600 hover:bg-red-500 focus:ring-2 focus:ring-offset-2 focus:ring-red-700",
         disabled: "bg-red-400",
     },

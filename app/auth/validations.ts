@@ -8,6 +8,25 @@ export const Signup = z.object({
     age: z.number().min(18),
     gender: z.enum(["MALE", "FEMALE"]),
     preference: z.enum(["MALE", "FEMALE"]),
+    token: z.string(),
+    tracks: z
+        .array(
+            z.object({
+                name: z.string(),
+                album: z.string(),
+                artist: z.string(),
+                cover: z.string(),
+                acousticness: z.number(),
+                danceability: z.number(),
+                energy: z.number(),
+                instrumentalness: z.number(),
+                liveness: z.number(),
+                speechiness: z.number(),
+                valence: z.number(),
+                preview: z.string(),
+            }),
+        )
+        .optional(),
     password,
 })
 

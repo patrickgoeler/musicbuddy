@@ -23,6 +23,7 @@ model User {
   age            Int
   gender         Gender
   preference     Gender
+  tracks         Json
 
   tokens   Token[]
   sessions Session[]

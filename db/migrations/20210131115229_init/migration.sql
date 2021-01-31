@@ -16,6 +16,7 @@ CREATE TABLE "User" (
     "age" INTEGER NOT NULL,
     "gender" "Gender" NOT NULL,
     "preference" "Gender" NOT NULL,
+    "tracks" JSONB NOT NULL,
 
     PRIMARY KEY ("id")
 );
