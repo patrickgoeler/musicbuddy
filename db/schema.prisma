@@ -29,6 +29,7 @@ model User {
 
   tokens   Token[]
   sessions Session[]
+  Message  Message[]
 }
 
 enum Gender {
@@ -81,4 +82,20 @@ model Request {
   tracks    Json
 
   @@unique([fromId, toId])
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String
+  from      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model Thread {
+  id        Int       @default(autoincrement()) @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[] 
 }
