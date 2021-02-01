@@ -13,17 +13,19 @@ generator client {
 // --------------------------------------
 
 model User {
-  id             String   @id @default(cuid())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  name           String?
-  email          String   @unique
-  hashedPassword String?
-  role           String   @default("user")
-  age            Int
-  gender         Gender
-  preference     Gender
-  tracks         Json
+  id               String    @id @default(cuid())
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  name             String?
+  email            String    @unique
+  hashedPassword   String?
+  role             String    @default("user")
+  age              Int
+  gender           Gender
+  preference       Gender
+  tracks           Json
+  outgoingRequests Request[] @relation("fromUser")
+  incomingRequests Request[] @relation("toUser")
 
   tokens   Token[]
   sessions Session[]
@@ -66,4 +68,17 @@ model Token {
 
 enum TokenType {
   RESET_PASSWORD
+}
+
+model Request {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  from      User     @relation("fromUser", fields: [fromId], references: [id])
+  fromId    String
+  to        User     @relation("toUser", fields: [toId], references: [id])
+  toId      String
+  tracks    Json
+
+  @@unique([fromId, toId])
 }

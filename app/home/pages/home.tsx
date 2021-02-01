@@ -11,13 +11,14 @@ function Home() {
         <div className="h-full flex flex-col">
             {likes.length > 0 && (
                 <Suspense fallback={<div>Loading matches...</div>}>
-                    <MatchList />
+                    <MatchList tracks={likes} />
                 </Suspense>
             )}
             {isPlaying ? (
                 <Suspense fallback={<div>Loading tracks...</div>}>
                     <PlayInterface
                         onFinish={(tracks) => {
+                            console.log({ tracks })
                             setLikes(tracks)
                             setIsPlaying(false)
                         }}

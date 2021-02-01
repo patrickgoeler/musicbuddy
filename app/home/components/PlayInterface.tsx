@@ -64,53 +64,55 @@ export default function PlayInterface({ onFinish }: Props) {
     }
 
     return (
-        <div className="w-full max-w-sm space-y-4 flex flex-col">
-            <h1>Random tracks:</h1>
-            <Button fullWidth variant="primary" onClick={() => loadMore()}>
-                Load New
-            </Button>
-            <div className="relative h-80">
-                {tracks.map((track, index) => (
-                    <TinderCard
-                        ref={childRefs[index]}
-                        key={track.id}
-                        onSwipe={(dir) => swiped(dir, track)}
-                        preventSwipe={["up", "down"]}
-                    >
-                        <TrackCard
+        <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full max-w-sm space-y-4 flex flex-col">
+                <h1>Random tracks:</h1>
+                <Button fullWidth variant="primary" onClick={() => loadMore()}>
+                    Load New
+                </Button>
+                <div className="relative h-80">
+                    {tracks.map((track, index) => (
+                        <TinderCard
+                            ref={childRefs[index]}
                             key={track.id}
-                            album={track.album.name}
-                            artist={track.artists[0].name}
-                            cover={track.album.images[0].url}
-                            name={track.name}
-                            preview={track.preview_url}
-                        />
-                    </TinderCard>
-                ))}
-                {(isLoading || isLocalLoading) && (
-                    <div className="absolute z-10 w-full h-full flex items-center justify-center bg-gray-700 opacity-50 rounded">
-                        <Loader />
-                    </div>
-                )}
-            </div>
-            <div className="flex justify-between">
-                <Button
-                    onClick={() => {
-                        swipe("left")
-                    }}
-                    disabled={isLoading || isLocalLoading}
-                >
-                    No
-                </Button>
-                <Button
-                    variant="primary"
-                    disabled={isLoading || isLocalLoading}
-                    onClick={() => {
-                        swipe("right")
-                    }}
-                >
-                    Yes
-                </Button>
+                            onSwipe={(dir) => swiped(dir, track)}
+                            preventSwipe={["up", "down"]}
+                        >
+                            <TrackCard
+                                key={track.id}
+                                album={track.album.name}
+                                artist={track.artists[0].name}
+                                cover={track.album.images[0].url}
+                                name={track.name}
+                                preview={track.preview_url}
+                            />
+                        </TinderCard>
+                    ))}
+                    {(isLoading || isLocalLoading) && (
+                        <div className="absolute z-10 w-full h-full flex items-center justify-center bg-gray-700 opacity-50 rounded">
+                            <Loader />
+                        </div>
+                    )}
+                </div>
+                <div className="flex justify-between">
+                    <Button
+                        onClick={() => {
+                            swipe("left")
+                        }}
+                        disabled={isLoading || isLocalLoading}
+                    >
+                        No
+                    </Button>
+                    <Button
+                        variant="primary"
+                        disabled={isLoading || isLocalLoading}
+                        onClick={() => {
+                            swipe("right")
+                        }}
+                    >
+                        Yes
+                    </Button>
+                </div>
             </div>
         </div>
     )

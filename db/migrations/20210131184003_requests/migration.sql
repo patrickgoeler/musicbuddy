@@ -1,0 +1,17 @@
+-- CreateTable
+CREATE TABLE "Request" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "fromId" TEXT NOT NULL,
+    "toId" TEXT NOT NULL,
+    "tracks" JSONB NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "Request" ADD FOREIGN KEY ("fromId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Request" ADD FOREIGN KEY ("toId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

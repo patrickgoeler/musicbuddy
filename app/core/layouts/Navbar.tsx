@@ -1,7 +1,7 @@
 import Messages from "app/home/components/Messages"
 import Requests from "app/home/components/Requests"
 import { Chat, ChatAlt2, UserAdd } from "heroicons-react"
-import React from "react"
+import React, { Suspense } from "react"
 import Tabs from "../components/Tabs"
 
 export default function Navbar() {
@@ -32,12 +32,20 @@ export default function Navbar() {
                                         {
                                             text: "Requests",
                                             icon: <UserAdd className="w-ful h-full" />,
-                                            content: <Requests />,
+                                            content: (
+                                                <Suspense fallback={<div>Loading Requests</div>}>
+                                                    <Requests />
+                                                </Suspense>
+                                            ),
                                         },
                                         {
                                             text: "Messages",
                                             icon: <ChatAlt2 className="w-full h-full" />,
-                                            content: <Messages />,
+                                            content: (
+                                                <Suspense fallback={<div>Loading Messages</div>}>
+                                                    <Messages />
+                                                </Suspense>
+                                            ),
                                         },
                                     ]}
                                 />

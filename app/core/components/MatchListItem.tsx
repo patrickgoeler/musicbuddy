@@ -1,4 +1,9 @@
-import { Plus, UserAdd } from "heroicons-react"
+import createRequest from "app/requests/mutations/createRequest"
+import { useMutation } from "blitz"
+import { CheckCircle, Plus, UserAdd } from "heroicons-react"
+import { useState } from "react"
+import { useCurrentUser } from "../hooks/useCurrentUser"
+import Loader from "./Loader"
 
 interface Props {
     user: {
@@ -6,12 +11,34 @@ interface Props {
         name: string | null
         age: number
     }
+    tracks: any[]
 }
 
-export default function MatchListItem({ user: { id, name, age } }: Props) {
+export default function MatchListItem({ user: { id, name, age }, tracks }: Props) {
+    const user = useCurrentUser()
+    const [createRequestMutation, { isLoading }] = useMutation(createRequest)
+    const [added, setAdded] = useState(false)
+
     return (
-        <li className="cursor-pointer">
-            <div className="block hover:bg-gray-50">
+        <li className="cursor-pointer focus:outline-none">
+            <button
+                onClick={async () => {
+                    if (!added) {
+                        setAdded(true)
+                        await createRequestMutation(
+                            {
+                                data: { tracks, toId: id!, fromId: user?.id! },
+                            },
+                            {
+                                onError: () => {
+                                    setAdded(false)
+                                },
+                            },
+                        )
+                    }
+                }}
+                className="block hover:bg-gray-50 w-full focus:outline-none"
+            >
                 <div className="flex items-center px-4 py-4 sm:px-6">
                     <div className="min-w-0 flex-1 flex items-center">
                         <div className="flex-shrink-0">
@@ -23,7 +50,7 @@ export default function MatchListItem({ user: { id, name, age } }: Props) {
                         </div>
                         <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                             <div>
-                                <p className="text-sm font-medium text-indigo-600 truncate">
+                                <p className="text-sm flex items-center font-medium text-indigo-600 truncate">
                                     {name}
                                 </p>
                                 <p className="mt-2 flex items-center text-sm text-gray-500">
@@ -33,10 +60,16 @@ export default function MatchListItem({ user: { id, name, age } }: Props) {
                         </div>
                     </div>
                     <div>
-                        <UserAdd className="h-6 w-6 text-gray-400" />
+                        {isLoading ? (
+                            <Loader />
+                        ) : added ? (
+                            <CheckCircle className="h-6 w-6 text-green-500" />
+                        ) : (
+                            <UserAdd className="h-6 w-6 text-gray-400" />
+                        )}
                     </div>
                 </div>
-            </div>
+            </button>
         </li>
     )
 }
