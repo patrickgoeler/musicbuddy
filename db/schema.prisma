@@ -24,12 +24,14 @@ model User {
   gender           Gender
   preference       Gender
   tracks           Json
+  // this is bad
   outgoingRequests Request[] @relation("fromUser")
   incomingRequests Request[] @relation("toUser")
+  userOneThreads   Thread[]  @relation("userOne")
+  userTwoThreads   Thread[]  @relation("userTwo")
 
   tokens   Token[]
   sessions Session[]
-  Message  Message[]
 }
 
 enum Gender {
@@ -72,7 +74,7 @@ enum TokenType {
 }
 
 model Request {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   from      User     @relation("fromUser", fields: [fromId], references: [id])
@@ -85,17 +87,23 @@ model Request {
 }
 
 model Message {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   content   String
-  from      User     @relation(fields: [userId], references: [id])
-  userId    String
+  thread    Thread   @relation(fields: [threadId], references: [id])
+  threadId  String
+  sender    String
+  recipient String
 }
 
 model Thread {
-  id        Int       @default(autoincrement()) @id
+  id        String    @id @default(cuid())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  messages  Message[] 
+  userOne   User      @relation("userOne", fields: [userOneId], references: [id])
+  userOneId String    @default("")
+  userTwo   User      @relation("userTwo", fields: [userTwoId], references: [id])
+  userTwoId String    @default("")
+  messages  Message[]
 }

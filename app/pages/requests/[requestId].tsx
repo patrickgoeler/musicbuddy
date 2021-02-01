@@ -3,14 +3,17 @@ import Layout from "app/core/layouts/Layout"
 import deleteRequest from "app/requests/mutations/deleteRequest"
 import getRequest from "app/requests/queries/getRequest"
 import getRequests from "app/requests/queries/getRequests"
+import createThread from "app/threads/mutations/createThread"
+import getThreads from "app/threads/queries/getThreads"
 import { invalidateQuery, useMutation, useParam, useQuery, useRouter } from "blitz"
 import { Suspense } from "react"
 
 function Request() {
     const router = useRouter()
-    const requestId = useParam("requestId", "number")
+    const requestId = useParam("requestId", "string")
     const [request] = useQuery(getRequest, { where: { id: requestId } })
     const [deleteRequestMutation] = useMutation(deleteRequest)
+    const [createThreadMutation] = useMutation(createThread)
 
     return (
         <div>
@@ -31,9 +34,23 @@ function Request() {
                 </Button>
                 <Button
                     variant="primary"
-                    onClick={() => {
+                    onClick={async () => {
                         // create new, empty message thread
                         // delete request
+                        const thread = await createThreadMutation({
+                            data: {
+                                userOneId: request.fromId,
+                                userTwoId: request.toId,
+                            },
+                        })
+                        await deleteRequestMutation({
+                            where: { fromId_toId: { fromId: request.fromId, toId: request.toId } },
+                        })
+                        await Promise.all([
+                            invalidateQuery(getRequests),
+                            invalidateQuery(getThreads),
+                        ])
+                        router.replace(`/threads/${thread.id}`)
                     }}
                 >
                     Accept

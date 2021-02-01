@@ -10,7 +10,11 @@ export default async function getThreads(
     ctx.session.$authorize()
 
     const threads = await db.thread.findMany({
-        where,
+        where: {
+            ...where,
+            OR: [{ userOneId: ctx.session.userId }, { userTwoId: ctx.session.userId }],
+        },
+        include: { userOne: true, userTwo: true },
         orderBy,
         take,
         skip,
