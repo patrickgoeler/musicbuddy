@@ -1,10 +1,12 @@
-import { Suspense } from "react"
-import { Link, useRouter, useQuery, useParam, BlitzPage, useMutation } from "blitz"
+import Button from "app/core/components/Button"
 import Layout from "app/core/layouts/Layout"
-import getRequest from "app/requests/queries/getRequest"
 import deleteRequest from "app/requests/mutations/deleteRequest"
+import getRequest from "app/requests/queries/getRequest"
+import getRequests from "app/requests/queries/getRequests"
+import { invalidateQuery, useMutation, useParam, useQuery, useRouter } from "blitz"
+import { Suspense } from "react"
 
-export const Request = () => {
+function Request() {
     const router = useRouter()
     const requestId = useParam("requestId", "number")
     const [request] = useQuery(getRequest, { where: { id: requestId } })
@@ -12,37 +14,38 @@ export const Request = () => {
 
     return (
         <div>
-            <h1>Request {request.id}</h1>
-            <pre>{JSON.stringify(request, null, 2)}</pre>
-
-            <Link href={`/requests/${request.id}/edit`}>
-                <a>Edit</a>
-            </Link>
-
-            <button
-                type="button"
-                onClick={async () => {
-                    if (window.confirm("This will be deleted")) {
-                        await deleteRequestMutation({ where: { id: request.id } })
-                        router.push("/requests")
-                    }
-                }}
-            >
-                Delete
-            </button>
+            <div>{request.from.name}</div>
+            <div>{request.from.age}</div>
+            <div className="flex items-center">
+                <Button
+                    onClick={async () => {
+                        // just delete request
+                        await deleteRequestMutation({
+                            where: { fromId_toId: { fromId: request.fromId, toId: request.toId } },
+                        })
+                        await invalidateQuery(getRequests)
+                        router.replace("/home")
+                    }}
+                >
+                    Decline
+                </Button>
+                <Button
+                    variant="primary"
+                    onClick={() => {
+                        // create new, empty message thread
+                        // delete request
+                    }}
+                >
+                    Accept
+                </Button>
+            </div>
         </div>
     )
 }
 
-const ShowRequestPage: BlitzPage = () => {
+function ShowRequestPage() {
     return (
         <div>
-            <p>
-                <Link href="/requests">
-                    <a>Requests</a>
-                </Link>
-            </p>
-
             <Suspense fallback={<div>Loading...</div>}>
                 <Request />
             </Suspense>
@@ -50,6 +53,6 @@ const ShowRequestPage: BlitzPage = () => {
     )
 }
 
-ShowRequestPage.getLayout = (page) => <Layout title={"Request"}>{page}</Layout>
+ShowRequestPage.getLayout = (page) => <Layout title="Message Request">{page}</Layout>
 
 export default ShowRequestPage

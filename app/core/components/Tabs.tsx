@@ -56,7 +56,7 @@ export default function Tabs({ tabs }: Props) {
                 </div>
             </div>
 
-            <div className="mt-8 xl:mt-10">{tabs[selectedTab].content}</div>
+            <div className="mt-0">{tabs[selectedTab].content}</div>
         </div>
     )
 }

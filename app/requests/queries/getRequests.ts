@@ -14,7 +14,7 @@ export default async function getRequests(
         orderBy,
         take,
         skip,
-        include: { to: true },
+        include: { from: { select: { name: true, age: true } } },
     })
 
     const count = await db.request.count({ where: { toId: ctx.session.userId } })

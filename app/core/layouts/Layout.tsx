@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ReactNode, Suspense } from "react"
 import { Head } from "blitz"
 import Navbar from "./Navbar"
 
@@ -24,7 +24,10 @@ const Layout = ({ title, children }: LayoutProps) => {
                             <h1 className="text-2xl font-semibold text-gray-900">{title}</h1>
                         </div>
                     )}
-                    <div className="max-w-7xl flex-1">{children}</div>
+                    <div className="max-w-7xl flex-1">
+                        {/* Fallback Suspense */}
+                        <Suspense fallback={<div>Loading content...</div>}>{children}</Suspense>
+                    </div>
                 </main>
             </div>
         </>
