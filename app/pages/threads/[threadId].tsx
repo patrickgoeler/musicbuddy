@@ -20,7 +20,7 @@ function Thread() {
     return (
         <div className="h-full flex flex-col max-h-screen">
             <ThreadHeader user={otherUser} />
-            <div className="max-w-7xl flex-1 flex flex-col overflow-auto">
+            <div className="max-w-7xl flex-1 flex flex-col overflow-auto mx-auto w-full">
                 <Suspense fallback={<div>Loading messages...</div>}>
                     <Messages threadId={thread.id} />
                 </Suspense>
