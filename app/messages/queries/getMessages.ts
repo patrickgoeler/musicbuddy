@@ -10,7 +10,10 @@ export default async function getMessages(
     ctx.session.$authorize()
 
     const messages = await db.message.findMany({
-        where,
+        where: {
+            ...where,
+            OR: [{ recipient: ctx.session.userId }, { sender: ctx.session.userId }],
+        },
         orderBy,
         take,
         skip,
