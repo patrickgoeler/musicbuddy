@@ -1,5 +1,6 @@
 import Button from "app/core/components/Button"
 import Layout from "app/core/layouts/Layout"
+import { useRouter, useRouterQuery } from "blitz"
 import { Suspense, useState } from "react"
 import MatchList from "../components/MatchList"
 import PlayInterface from "../components/PlayInterface"
@@ -7,6 +8,22 @@ import PlayInterface from "../components/PlayInterface"
 function Home() {
     const [isPlaying, setIsPlaying] = useState(false)
     const [likes, setLikes] = useState<any[]>([])
+    const query = useRouterQuery()
+    const router = useRouter()
+
+    console.log(!!query.start)
+
+    if (!!query.start && !isPlaying) {
+        console.log("start", query)
+        router.replace("/home")
+        start()
+    }
+
+    function start() {
+        setLikes([])
+        setIsPlaying(true)
+    }
+
     return (
         <div className="h-full flex flex-col">
             {likes.length > 0 && (
@@ -25,16 +42,7 @@ function Home() {
                     />
                 </Suspense>
             ) : (
-                <Button
-                    className="mt-4"
-                    onClick={() => {
-                        // fetch random tracks
-                        setLikes([])
-                        setIsPlaying(true)
-                    }}
-                    fullWidth
-                    variant="primary"
-                >
+                <Button className="mt-4" onClick={() => start()} fullWidth variant="primary">
                     Let's Play
                 </Button>
             )}
