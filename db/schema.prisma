@@ -23,7 +23,7 @@ model User {
   age              Int
   gender           Gender
   preference       Gender
-  tracks           Json
+  tracks           Json[]
   // this is bad
   outgoingRequests Request[] @relation("fromUser")
   incomingRequests Request[] @relation("toUser")

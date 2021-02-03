@@ -12,6 +12,7 @@ export const Signup = z.object({
     tracks: z
         .array(
             z.object({
+                id: z.string(),
                 name: z.string(),
                 album: z.string(),
                 artist: z.string(),
@@ -24,6 +25,7 @@ export const Signup = z.object({
                 speechiness: z.number(),
                 valence: z.number(),
                 preview: z.string(),
+                url: z.string(),
             }),
         )
         .optional(),

@@ -56,10 +56,11 @@ function SignupForm(props: SignupFormProps) {
                     const tracks = await getTopTracks(values.token)
                     const analyzedTracks = await getAnalyzedTracks(values.token, tracks)
                     const compoundedTracks = getCompoundedTracks(tracks, analyzedTracks)
-                    console.log(compoundedTracks)
+                    console.log("compound tracks", compoundedTracks[0])
                     await signupMutation({
                         ...values,
                         tracks: compoundedTracks.map((track) => ({
+                            id: track.id,
                             name: track.name,
                             album: track.album.name,
                             artist: track.artists[0].name,
@@ -72,6 +73,7 @@ function SignupForm(props: SignupFormProps) {
                             speechiness: track.speechiness,
                             valence: track.valence,
                             preview: track.preview_url,
+                            url: track.external_urls.spotify,
                         })),
                     })
                     props.onSuccess?.()

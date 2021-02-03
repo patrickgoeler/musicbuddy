@@ -95,7 +95,7 @@ export default function PlayInterface({ onFinish }: Props) {
                                 cover={track.cover}
                                 name={track.name}
                                 preview={track.preview}
-                                // link={track.external_urls.spotify}
+                                link={track.url}
                             />
                         </TinderCard>
                     ))}

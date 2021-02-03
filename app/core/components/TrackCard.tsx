@@ -9,11 +9,11 @@ interface Props {
     album: string
     cover: string
     preview: string
-    // link: string
+    link: string
 }
 
 const TrackCard = React.forwardRef<HTMLAudioElement, Props>(
-    ({ name, artist, album, cover, preview }: Props, ref) => {
+    ({ name, artist, album, cover, preview, link }: Props, ref) => {
         return (
             <div
                 onDrag={() => console.log("on drag")}
@@ -28,9 +28,9 @@ const TrackCard = React.forwardRef<HTMLAudioElement, Props>(
                         <div className="text-gray-700">{artist}</div>
                     </div>
 
-                    {/* <a target="_blank" rel="noreferrer" href={link}>
+                    <a target="_blank" rel="noreferrer" href={link}>
                         <ExternalLink className="flex-shrink-0 cursor-pointer" />
-                    </a> */}
+                    </a>
                 </div>
                 <audio ref={ref} className="w-full focus:outline-none" controls src={preview}>
                     Your browser does not support the

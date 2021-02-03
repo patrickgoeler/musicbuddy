@@ -1,6 +1,5 @@
 import { Ctx } from "blitz"
 import db from "db"
-import { getRandomTracks } from "integrations/Spotify"
 import { shuffleArray } from "integrations/utils"
 
 export default async function randomTracks(_ = null, ctx: Ctx) {
@@ -10,8 +9,7 @@ export default async function randomTracks(_ = null, ctx: Ctx) {
     let tracks: any[] = []
     for (let i = 0; i < users.length; i++) {
         const user = users[i]
-        console.log("tracks", user.tracks)
-        tracks = [...tracks, ...(user.tracks as any[])]
+        tracks = [...tracks, ...user.tracks]
     }
 
     shuffleArray(tracks)
