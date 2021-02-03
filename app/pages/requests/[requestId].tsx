@@ -1,62 +1,27 @@
-import Button from "app/core/components/Button"
+import TrackCard from "app/core/components/TrackCard"
 import Layout from "app/core/layouts/Layout"
-import deleteRequest from "app/requests/mutations/deleteRequest"
+import RequestHeader from "app/requests/components/RequestHeader"
 import getRequest from "app/requests/queries/getRequest"
-import getRequests from "app/requests/queries/getRequests"
-import createThread from "app/threads/mutations/createThread"
-import getThreads from "app/threads/queries/getThreads"
-import { invalidateQuery, useMutation, useParam, useQuery, useRouter } from "blitz"
+import { useParam, useQuery } from "blitz"
 import { Suspense } from "react"
 
 function Request() {
-    const router = useRouter()
     const requestId = useParam("requestId", "string")
     const [request] = useQuery(getRequest, { where: { id: requestId } })
-    const [deleteRequestMutation] = useMutation(deleteRequest)
-    const [createThreadMutation] = useMutation(createThread)
 
     return (
-        <div>
-            <div>{request.from.name}</div>
-            <div>{request.from.age}</div>
-            <div className="flex items-center">
-                <Button
-                    onClick={async () => {
-                        // just delete request
-                        await deleteRequestMutation({
-                            where: { fromId_toId: { fromId: request.fromId, toId: request.toId } },
-                        })
-                        await invalidateQuery(getRequests)
-                        router.replace("/home")
-                    }}
-                >
-                    Decline
-                </Button>
-                <Button
-                    variant="primary"
-                    onClick={async () => {
-                        // create new, empty message thread
-                        // delete request
-                        const thread = await createThreadMutation({
-                            data: {
-                                userOneId: request.fromId,
-                                userTwoId: request.toId,
-                            },
-                        })
-                        await deleteRequestMutation({
-                            where: { fromId_toId: { fromId: request.fromId, toId: request.toId } },
-                        })
-                        await Promise.all([
-                            invalidateQuery(getRequests),
-                            invalidateQuery(getThreads),
-                        ])
-                        router.replace(`/threads/${thread.id}`)
-                    }}
-                >
-                    Accept
-                </Button>
+        <>
+            <RequestHeader request={request} />
+            <div className="px-4 sm:px-6 md:px-8 py-6">
+                <div className="mb-8">User Bio</div>
+                <h3 className="text-xl font-bold mb-4">Swiped Tracks</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {request.tracks.map((track) => (
+                        <TrackCard track={track} key={track.id} />
+                    ))}
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 
@@ -70,6 +35,10 @@ function ShowRequestPage() {
     )
 }
 
-ShowRequestPage.getLayout = (page) => <Layout title="Message Request">{page}</Layout>
+ShowRequestPage.getLayout = (page) => (
+    <Layout fullWidth title="Message Request">
+        {page}
+    </Layout>
+)
 
 export default ShowRequestPage

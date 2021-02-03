@@ -88,14 +88,10 @@ export default function PlayInterface({ onFinish }: Props) {
                             preventSwipe={["up", "down"]}
                         >
                             <TrackCard
+                                isAbsolute
                                 ref={cardRefs[index]}
                                 key={track.id}
-                                album={track.album.name}
-                                artist={track.artist}
-                                cover={track.cover}
-                                name={track.name}
-                                preview={track.preview}
-                                link={track.url}
+                                track={track}
                             />
                         </TinderCard>
                     ))}

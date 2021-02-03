@@ -1,3 +1,4 @@
+import { Track } from "@prisma/client"
 import createRequest from "app/requests/mutations/createRequest"
 import { useMutation } from "blitz"
 import { CheckCircle, Plus, UserAdd } from "heroicons-react"
@@ -11,13 +12,15 @@ interface Props {
         name: string | null
         age: number
     }
-    tracks: any[]
+    tracks: Track[]
 }
 
 export default function MatchListItem({ user: { id, name, age }, tracks }: Props) {
     const user = useCurrentUser()
     const [createRequestMutation, { isLoading }] = useMutation(createRequest)
     const [added, setAdded] = useState(false)
+
+    console.log("request tracks", tracks)
 
     return (
         <li className="cursor-pointer focus:outline-none">
@@ -27,7 +30,11 @@ export default function MatchListItem({ user: { id, name, age }, tracks }: Props
                         setAdded(true)
                         await createRequestMutation(
                             {
-                                data: { tracks, toId: id!, fromId: user?.id! },
+                                data: {
+                                    tracks: { connect: tracks.map((track) => ({ id: track.id })) },
+                                    toId: id!,
+                                    fromId: user?.id!,
+                                },
                             },
                             {
                                 onError: () => {

@@ -8,7 +8,7 @@ export default async function getRequest({ where }: GetRequestInput, ctx: Ctx) {
 
     const request = await db.request.findFirst({
         where,
-        include: { from: { select: { name: true, age: true } } },
+        include: { from: { select: { name: true, age: true } }, tracks: true },
     })
 
     if (!request) throw new NotFoundError()

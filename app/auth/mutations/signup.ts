@@ -15,7 +15,12 @@ export default resolver.pipe(
                 age,
                 gender,
                 preference,
-                tracks,
+                tracks: {
+                    connectOrCreate: tracks?.map((track) => ({
+                        where: { id: track.id },
+                        create: track,
+                    })),
+                },
             },
             select: { id: true, name: true, email: true, role: true },
         })
