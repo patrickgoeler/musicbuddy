@@ -1,4 +1,5 @@
 import axios from "axios"
+import { shuffleArray } from "./utils"
 
 export async function getAccessToken() {
     let body = new URLSearchParams()
@@ -49,37 +50,108 @@ export function getCompoundedTracks(tracks: any[], analyzedTracks: any[]) {
     return compoundedTracks
 }
 
-export async function getRandomTracks() {
+export async function fetchRandomTracks(amount = 10) {
     const token = await getAccessToken()
-    console.log("token", token)
     const wildcards = [
         "%25a%25",
         "a%25",
         "%25a",
+        "%25b%25",
+        "b%25",
+        "%25b",
+        "%25c%25",
+        "c%25",
+        "%25c",
+        "%25d%25",
+        "d%25",
+        "%25d",
         "%25e%25",
         "e%25",
         "%25e",
+        "%25f%25",
+        "f%25",
+        "%25f",
+        "%25g%25",
+        "g%25",
+        "%25g",
+        "%25h%25",
+        "h%25",
+        "%25h",
         "%25i%25",
         "i%25",
         "%25i",
+        "%25k%25",
+        "k%25",
+        "%25k",
+        "%25k%25",
+        "k%25",
+        "%25k",
+        "%25l%25",
+        "l%25",
+        "%25l",
+        "%25m%25",
+        "m%25",
+        "%25m",
+        "%25n%25",
+        "n%25",
+        "%25n",
         "%25o%25",
         "o%25",
         "%25o",
+        "%25p%25",
+        "p%25",
+        "%25p",
+        "%25q%25",
+        "q%25",
+        "%25q",
+        "%25r%25",
+        "r%25",
+        "%25r",
+        "%25s%25",
+        "s%25",
+        "%25s",
+        "%25t%25",
+        "t%25",
+        "%25t",
         "%25u%25",
         "u%25",
         "%25u",
+        "%25v%25",
+        "v%25",
+        "%25v",
+        "%25w%25",
+        "w%25",
+        "%25w",
+        "%25x%25",
+        "x%25",
+        "%25x",
+        "%25y%25",
+        "y%25",
+        "%25y",
+        "%25z%25",
+        "z%25",
+        "%25z",
     ]
     const randomWildcard = wildcards[Math.floor(Math.random() * wildcards.length)]
     const randomOffset = Math.floor(Math.random() * 1950)
-    console.log(randomWildcard, randomOffset)
+
     const { data } = await axios.get(
-        `https://api.spotify.com/v1/search?q=${randomWildcard}&type=track&offset=${randomOffset}&limit=12`,
+        `https://api.spotify.com/v1/search?q=${randomWildcard}&type=track&offset=${randomOffset}&limit=${amount}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         },
     )
-    console.log("random tracks", data.tracks.items)
     return data.tracks.items
+}
+
+export async function getRandomTracks() {
+    let tracks: any[] = []
+    for (let i = 0; i < 1; i++) {
+        const randomTracks = await fetchRandomTracks()
+        tracks = [...tracks, ...randomTracks]
+    }
+    shuffleArray(tracks)
+    return tracks
 }

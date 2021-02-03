@@ -26,8 +26,17 @@ export default function PlayInterface({ onFinish }: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
     )
+    const cardRefs = useMemo(
+        () =>
+            Array(tracks.length)
+                .fill(0)
+                .map((i) => React.createRef<any>()),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    )
 
-    const swiped = (direction, track) => {
+    const swiped = (direction, track, index) => {
+        cardRefs[index].current.pause()
         if (direction === "left") {
             dislikes.push(track)
         } else if (direction === "right") {
@@ -74,17 +83,19 @@ export default function PlayInterface({ onFinish }: Props) {
                     {tracks.map((track, index) => (
                         <TinderCard
                             ref={childRefs[index]}
-                            key={track.id}
-                            onSwipe={(dir) => swiped(dir, track)}
+                            key={index}
+                            onSwipe={(dir) => swiped(dir, track, index)}
                             preventSwipe={["up", "down"]}
                         >
                             <TrackCard
+                                ref={cardRefs[index]}
                                 key={track.id}
                                 album={track.album.name}
-                                artist={track.artists[0].name}
-                                cover={track.album.images[0].url}
+                                artist={track.artist}
+                                cover={track.cover}
                                 name={track.name}
-                                preview={track.preview_url}
+                                preview={track.preview}
+                                // link={track.external_urls.spotify}
                             />
                         </TinderCard>
                     ))}
