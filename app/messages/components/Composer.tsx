@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 import Button from "app/core/components/Button"
 import { useState } from "react"
 
@@ -19,6 +20,7 @@ export default function Composer({ onSend }: Props) {
             <input
                 type="text"
                 name="email"
+                autoFocus
                 id="email"
                 value={text}
                 onChange={(event) => {
