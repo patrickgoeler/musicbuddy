@@ -3,7 +3,7 @@ import { Track } from "@prisma/client"
 import { Image } from "blitz"
 import clsx from "clsx"
 import { ExternalLink } from "heroicons-react"
-import React from "react"
+import React, { useEffect, useRef } from "react"
 
 interface Props {
     track: Track
@@ -33,7 +33,16 @@ const TrackCard = React.forwardRef<HTMLAudioElement, Props>(
                         <ExternalLink className="flex-shrink-0 cursor-pointer" />
                     </a>
                 </div>
-                <audio ref={ref} className="w-full focus:outline-none" controls src={track.preview}>
+                <audio
+                    ref={ref}
+                    onCanPlay={(event) => {
+                        // set default volume to 10% because 100% is way too fucking loud
+                        event.currentTarget.volume = 0.1
+                    }}
+                    className="w-full focus:outline-none"
+                    controls
+                    src={track.preview}
+                >
                     Your browser does not support the
                     <code>audio</code> element.
                 </audio>

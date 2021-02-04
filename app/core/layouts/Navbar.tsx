@@ -65,7 +65,7 @@ export default function Navbar() {
                 <div className={clsx(isMenuOpen ? "block" : "hidden")}>
                     <div className="pt-2 pb-3 space-y-1">
                         {navItems.map((item) => (
-                            <NavButton item={item} />
+                            <NavButton key={item.text} item={item} />
                         ))}
                     </div>
                     <div className="pt-4 pb-3 border-t border-gray-200">
@@ -94,7 +94,7 @@ export default function Navbar() {
                         </div>
                         <div className="mt-3 space-y-1">
                             {userNavItems.map((item) => (
-                                <NavButton item={item} />
+                                <NavButton key={item.text} item={item} />
                             ))}
                         </div>
                     </div>
