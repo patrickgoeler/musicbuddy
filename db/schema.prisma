@@ -21,6 +21,7 @@ model User {
   hashedPassword   String?
   role             String    @default("user")
   age              Int
+  bio              String    @default("")
   gender           Gender
   preference       Gender
   tracks           Track[]

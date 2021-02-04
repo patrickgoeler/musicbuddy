@@ -56,3 +56,9 @@ export const ChangePassword = z.object({
     currentPassword: z.string(),
     newPassword: password,
 })
+
+export const ProfileValidation = z.object({
+    email: z.string().email(),
+    name: z.string().nonempty(),
+    bio: z.string().nullable(),
+})
