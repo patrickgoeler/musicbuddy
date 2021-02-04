@@ -5,8 +5,6 @@ export default async function matches(params: { tracks: any[] }, ctx: Ctx) {
     ctx.session.$authorize()
     const { userId } = ctx.session
 
-    // TODO: Matching algorithm
-
     const userRequests = await db.request.findMany({
         where: { OR: [{ toId: userId }, { fromId: userId }] },
     })
@@ -24,9 +22,15 @@ export default async function matches(params: { tracks: any[] }, ctx: Ctx) {
 
     const ineligibleUsers = ineligibleUserIds.map((id) => ({ id }))
 
+    const user = await db.user.findFirst({ where: { id: userId } })
+
     let possibleMatches = await db.user.findMany({
         select: { name: true, age: true, id: true, tracks: true },
-        where: { NOT: [...ineligibleUsers, { id: userId }] },
+        where: {
+            NOT: [...ineligibleUsers, { id: userId }],
+            gender: user?.preference,
+            preference: user?.gender,
+        },
     })
 
     // match algorithm, find top 10 by music taste
@@ -57,8 +61,6 @@ export default async function matches(params: { tracks: any[] }, ctx: Ctx) {
     matchMetrics.sort((a, b) => {
         return a.distance - b.distance
     })
-
-    console.log("match metrics", matchMetrics)
 
     matchMetrics = matchMetrics.slice(0, 10)
 
