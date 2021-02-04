@@ -30,12 +30,7 @@ function Home() {
 
     return (
         <div className="h-full flex flex-col">
-            {likes.length > 0 && (
-                <Suspense fallback={<div>Loading matches...</div>}>
-                    <MatchList tracks={likes} />
-                </Suspense>
-            )}
-            {isPlaying ? (
+            {isPlaying && (
                 <Suspense fallback={<div>Loading tracks...</div>}>
                     <PlayInterface
                         onFinish={(tracks) => {
@@ -44,10 +39,28 @@ function Home() {
                         }}
                     />
                 </Suspense>
-            ) : (
-                <Button className="mt-4" onClick={() => start()} fullWidth variant="primary">
-                    Let's Play
-                </Button>
+            )}
+
+            {!isPlaying && likes.length === 0 && (
+                <div className="max-w-md h-full flex flex-col justify-center w-full mx-auto">
+                    <h1 className="text-2xl font-bold">Swipe songs, not people</h1>
+                    <p className="text-xl text-gray-500">
+                        Get matched based on your swiped songs and explore new music in the process
+                    </p>
+                    <Button className="mt-4" onClick={() => start()} fullWidth variant="primary">
+                        Start swiping
+                    </Button>
+                </div>
+            )}
+
+            {likes.length > 0 && (
+                <Suspense fallback={<div>Loading matches...</div>}>
+                    <MatchList tracks={likes} />
+
+                    <Button className="mt-4" variant="primary" onClick={() => start()} fullWidth>
+                        Play again
+                    </Button>
+                </Suspense>
             )}
         </div>
     )

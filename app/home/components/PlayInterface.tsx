@@ -2,6 +2,7 @@ import Button from "app/core/components/Button"
 import Loader from "app/core/components/Loader"
 import TrackCard from "app/core/components/TrackCard"
 import { useQuery } from "blitz"
+import { Play, Stop, ThumbDown, ThumbUp } from "heroicons-react"
 import React, { useEffect, useMemo, useState } from "react"
 import TinderCard from "react-tinder-card"
 import getRandomTracks from "../queries/getRandomTracks"
@@ -12,9 +13,10 @@ interface Props {
 
 export default function PlayInterface({ onFinish }: Props) {
     const likes = useMemo<any[]>(() => [], [])
+    const [likesState, setLikesState] = useState(0)
     const dislikes = useMemo<any[]>(() => [], [])
     const [isLocalLoading, setIsLocalLoading] = useState(false)
-    const [tracks, { refetch: loadMore, isLoading }] = useQuery(getRandomTracks, null, {
+    const [tracks, { refetch: loadMore, isLoading, isFetching }] = useQuery(getRandomTracks, null, {
         staleTime: 1000 * 60 * 60,
     })
 
@@ -41,6 +43,7 @@ export default function PlayInterface({ onFinish }: Props) {
             dislikes.push(track)
         } else if (direction === "right") {
             likes.push(track)
+            setLikesState(likesState + 1)
         }
         const cardsLeft = tracks.filter(
             (track) => !likes.includes(track) && !dislikes.includes(track),
@@ -75,11 +78,10 @@ export default function PlayInterface({ onFinish }: Props) {
     return (
         <div className="w-full h-full flex items-center justify-center">
             <div className="w-full max-w-sm space-y-4 flex flex-col">
-                <h1>Random tracks:</h1>
-                <Button fullWidth variant="primary" onClick={() => loadMore()}>
-                    Load New
-                </Button>
-                <div className="relative h-80">
+                <div>
+                    Likes: <strong>{likesState}</strong>/10
+                </div>
+                <div className="relative h-96">
                     {tracks.map((track, index) => (
                         <TinderCard
                             ref={childRefs[index]}
@@ -95,20 +97,20 @@ export default function PlayInterface({ onFinish }: Props) {
                             />
                         </TinderCard>
                     ))}
-                    {(isLoading || isLocalLoading) && (
+                    {(isLoading || isLocalLoading || isFetching) && (
                         <div className="absolute z-10 w-full h-full flex items-center justify-center bg-gray-700 opacity-50 rounded">
                             <Loader />
                         </div>
                     )}
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-around">
                     <Button
                         onClick={() => {
                             swipe("left")
                         }}
                         disabled={isLoading || isLocalLoading}
                     >
-                        No
+                        <ThumbDown size={40} />
                     </Button>
                     <Button
                         variant="primary"
@@ -117,7 +119,7 @@ export default function PlayInterface({ onFinish }: Props) {
                             swipe("right")
                         }}
                     >
-                        Yes
+                        <ThumbUp size={40} />
                     </Button>
                 </div>
             </div>
