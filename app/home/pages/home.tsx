@@ -1,9 +1,11 @@
 import Button from "app/core/components/Button"
 import Layout from "app/core/layouts/Layout"
-import { useRouter, useRouterQuery } from "blitz"
+import { invalidateQuery, useRouter, useRouterQuery } from "blitz"
 import { Suspense, useState } from "react"
 import MatchList from "../components/MatchList"
 import PlayInterface from "../components/PlayInterface"
+import getMatches from "../queries/getMatches"
+import getRandomTracks from "../queries/getRandomTracks"
 
 function Home() {
     const [isPlaying, setIsPlaying] = useState(false)
@@ -22,6 +24,8 @@ function Home() {
     function start() {
         setLikes([])
         setIsPlaying(true)
+        invalidateQuery(getMatches)
+        invalidateQuery(getRandomTracks)
     }
 
     return (
@@ -35,7 +39,6 @@ function Home() {
                 <Suspense fallback={<div>Loading tracks...</div>}>
                     <PlayInterface
                         onFinish={(tracks) => {
-                            console.log({ tracks })
                             setLikes(tracks)
                             setIsPlaying(false)
                         }}
